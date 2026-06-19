@@ -28,9 +28,9 @@ export function EditableImage({ contentKey, defaultSrc, alt, className }: Editab
         loadContent();
     }, [contentKey]);
 
-    if (isLoading) return <img src={defaultSrc} alt={alt} className={className} />;
-
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    if (isLoading) return <img src={defaultSrc} alt={alt} className={className} />;
 
     const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
