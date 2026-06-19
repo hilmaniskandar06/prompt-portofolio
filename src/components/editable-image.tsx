@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAdmin } from "./admin-provider";
 import { getSiteContent, updateSiteContent } from "@/lib/storage";
+import { compressImage } from "@/lib/utils";
 
 interface EditableImageProps {
     contentKey: string;
@@ -29,23 +30,48 @@ export function EditableImage({ contentKey, defaultSrc, alt, className }: Editab
 
     if (isLoading) return <img src={defaultSrc} alt={alt} className={className} />;
 
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            if (!file.type.startsWith("image/")) {
+                alert("File harus berupa gambar");
+                return;
+            }
+            try {
+                const compressed = await compressImage(file, 200);
+                setSrc(compressed);
+                updateSiteContent(contentKey, compressed);
+            } catch (error) {
+                console.error(error);
+                alert("Gagal memproses gambar");
+            }
+        }
+    };
+
     if (isAdmin) {
         return (
-            <img 
-                src={src} 
-                alt={alt}
-                className={`cursor-pointer hover:outline hover:outline-2 hover:outline-[var(--primary)] transition-all ${className}`}
-                onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const newUrl = window.prompt("Masukkan URL gambar baru:", src);
-                    if (newUrl !== null && newUrl.trim() !== "") {
-                        setSrc(newUrl);
-                        updateSiteContent(contentKey, newUrl);
-                    }
-                }}
-                title="Klik untuk mengubah URL gambar (Mode Admin)"
-            />
+            <>
+                <input 
+                    type="file" 
+                    accept="image/*" 
+                    className="hidden" 
+                    ref={fileInputRef} 
+                    onChange={handleFileSelect} 
+                />
+                <img 
+                    src={src} 
+                    alt={alt}
+                    className={`cursor-pointer hover:outline hover:outline-2 hover:outline-[var(--primary)] transition-all ${className}`}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        fileInputRef.current?.click();
+                    }}
+                    title="Klik untuk memilih gambar baru (Mode Admin)"
+                />
+            </>
         );
     }
 

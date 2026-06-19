@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Copy, Check, Trash2, ImageIcon, Calendar } from "lucide-react";
-import { getPromptById, deletePrompt } from "@/lib/storage";
+import { ArrowLeft, Copy, Check, ImageIcon, Calendar } from "lucide-react";
+import { getPromptById } from "@/lib/storage";
 import { copyToClipboard, formatDate } from "@/lib/utils";
 import { Prompt } from "@/lib/types";
 import { ImageModal } from "@/components/image-modal";
@@ -15,8 +15,6 @@ export default function PromptDetailPage() {
     const [prompt, setPrompt] = useState<Prompt | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [copied, setCopied] = useState(false);
-    const [isDeleting, setIsDeleting] = useState(false);
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [selectedImage, setSelectedImage] = useState<{ src: string, alt: string } | null>(null);
 
     useEffect(() => {
@@ -62,19 +60,6 @@ export default function PromptDetailPage() {
         }
     };
 
-    const handleDelete = async () => {
-        if (!prompt) return;
-
-        setIsDeleting(true);
-        const success = await deletePrompt(prompt.id);
-
-        if (success) {
-            showToast("Prompt berhasil dihapus!");
-            router.push("/");
-        } else {
-            showToast("Gagal menghapus prompt");
-            setIsDeleting(false);
-        }
     };
 
     if (isLoading) {
@@ -129,12 +114,6 @@ export default function PromptDetailPage() {
                                         <span>Salin</span>
                                     </>
                                 )}
-                            </button>
-                            <button
-                                onClick={() => setShowDeleteConfirm(true)}
-                                className="btn btn-ghost text-[var(--destructive)]"
-                            >
-                                <Trash2 className="w-4 h-4" />
                             </button>
                         </div>
                     </div>
@@ -233,36 +212,6 @@ export default function PromptDetailPage() {
                     </div>
                 </div>
             </main>
-
-            {/* Delete Confirmation Modal */}
-            {showDeleteConfirm && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                    <div className="bg-[var(--card)] rounded-xl p-6 max-w-md w-full mx-4 shadow-xl">
-                        <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">
-                            Hapus Prompt?
-                        </h3>
-                        <p className="text-[var(--muted)] mb-6">
-                            Apakah Anda yakin ingin menghapus prompt ini?
-                            Tindakan ini tidak dapat dibatalkan.
-                        </p>
-                        <div className="flex justify-end gap-2">
-                            <button
-                                onClick={() => setShowDeleteConfirm(false)}
-                                className="btn btn-secondary"
-                            >
-                                Batal
-                            </button>
-                            <button
-                                onClick={handleDelete}
-                                disabled={isDeleting}
-                                className="btn bg-[var(--destructive)] text-white hover:opacity-90"
-                            >
-                                {isDeleting ? "Menghapus..." : "Hapus"}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
 
             {/* Image Preview Modal */}
             {selectedImage && (
