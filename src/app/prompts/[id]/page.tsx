@@ -59,9 +59,6 @@ export default function PromptDetailPage() {
             setTimeout(() => setCopied(false), 2000);
         }
     };
-
-    };
-
     if (isLoading) {
         return (
             <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
