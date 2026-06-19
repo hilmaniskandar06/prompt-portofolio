@@ -1,0 +1,80 @@
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+    content: [
+        "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+        "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+        "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    ],
+    darkMode: "class",
+    theme: {
+        extend: {
+            colors: {
+                background: "var(--background)",
+                foreground: "var(--foreground)",
+                muted: "var(--muted)",
+                "muted-foreground": "var(--muted-foreground)",
+                border: "var(--border-default)",
+                input: "var(--border-default)",
+                ring: "var(--brand)",
+                primary: "var(--brand)",
+                "primary-foreground": "var(--black)",
+                secondary: "var(--neutral-secondary-medium)",
+                "secondary-foreground": "var(--heading)",
+                accent: "var(--neutral-tertiary-medium)",
+                "accent-foreground": "var(--heading)",
+                destructive: "var(--danger)",
+                "destructive-foreground": "var(--white)",
+                card: "var(--neutral-primary-soft)",
+                "card-foreground": "var(--heading)",
+                
+                // Neobrutalism Tokens
+                "neutral-primary-soft": "var(--neutral-primary-soft)",
+                "neutral-primary": "var(--neutral-primary)",
+                "neutral-primary-medium": "var(--neutral-primary-medium)",
+                "neutral-primary-strong": "var(--neutral-primary-strong)",
+                "neutral-secondary-soft": "var(--neutral-secondary-soft)",
+                "neutral-secondary": "var(--neutral-secondary)",
+                "neutral-secondary-medium": "var(--neutral-secondary-medium)",
+                "neutral-secondary-strong": "var(--neutral-secondary-strong)",
+                "neutral-tertiary-soft": "var(--neutral-tertiary-soft)",
+                "neutral-tertiary": "var(--neutral-tertiary)",
+                "neutral-tertiary-medium": "var(--neutral-tertiary-medium)",
+                "border-default": "var(--border-default)",
+                "border-default-strong": "var(--border-default-strong)",
+                brand: "var(--brand)",
+                "brand-softer": "var(--brand-softer)",
+                "brand-strong": "var(--brand-strong)",
+                danger: "var(--danger)",
+                "danger-strong": "var(--danger-strong)",
+            },
+            fontFamily: {
+                sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+                head: ["var(--font-head)", "system-ui", "sans-serif"],
+            },
+            boxShadow: {
+                "2xs": "1px 1px 0 0 var(--border-default)",
+                xs: "2px 2px 0 0 var(--border-default)",
+                sm: "3px 3px 0 0 var(--border-default)",
+                md: "4px 4px 0 0 var(--border-default)",
+                lg: "6px 6px 0 0 var(--border-default)",
+                xl: "10px 10px 0 1px var(--border-default)",
+                "2xl": "16px 16px 0 1px var(--border-default)",
+            },
+            borderRadius: {
+                DEFAULT: "0px",
+                none: "0px",
+                sm: "0px",
+                md: "0px",
+                lg: "0px",
+                xl: "0px",
+                "2xl": "0px",
+                "3xl": "0px",
+                full: "9999px",
+            },
+        },
+    },
+    plugins: [],
+};
+
+export default config;

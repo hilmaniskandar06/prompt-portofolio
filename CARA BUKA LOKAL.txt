@@ -1,0 +1,7 @@
+INSTAL NODE.JS
+
+KLIK KANAN BUKA DENGAN CMD KETIK INI :
+npm install
+npm run dev
+
+LALU AKAN ADA ALAMAT "localhost:xxxx" copy buka di web
