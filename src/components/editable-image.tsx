@@ -52,26 +52,26 @@ export function EditableImage({ contentKey, defaultSrc, alt, className }: Editab
 
     if (isAdmin) {
         return (
-            <>
+            <div 
+                className="relative inline-block cursor-pointer" 
+                onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }}
+            >
                 <input 
                     type="file" 
                     accept="image/*" 
-                    className="hidden" 
-                    ref={fileInputRef} 
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
                     onChange={handleFileSelect} 
+                    title="Klik untuk memilih gambar baru (Mode Admin)"
                 />
                 <img 
                     src={src} 
                     alt={alt}
-                    className={`cursor-pointer hover:outline hover:outline-2 hover:outline-[var(--primary)] transition-all ${className}`}
-                    onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        fileInputRef.current?.click();
-                    }}
-                    title="Klik untuk memilih gambar baru (Mode Admin)"
+                    className={`hover:outline hover:outline-2 hover:outline-[var(--primary)] transition-all ${className}`}
                 />
-            </>
+            </div>
         );
     }
 
