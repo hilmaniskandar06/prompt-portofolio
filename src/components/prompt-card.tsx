@@ -2,18 +2,22 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Copy, Check, ImageIcon } from "lucide-react";
+import { Copy, Check, ImageIcon, Trash } from "lucide-react";
 import { Prompt } from "@/lib/types";
 import { copyToClipboard, truncateText } from "@/lib/utils";
 import { ImageModal } from "./image-modal";
+import { useAdmin } from "./admin-provider";
+import { deletePrompt } from "@/lib/storage";
 
 interface PromptCardProps {
     prompt: Prompt;
+    onDelete?: () => void;
 }
 
-export function PromptCard({ prompt }: PromptCardProps) {
+export function PromptCard({ prompt, onDelete }: PromptCardProps) {
     const [copied, setCopied] = useState(false);
     const [selectedImage, setSelectedImage] = useState<{ src: string, alt: string } | null>(null);
+    const { isAdmin } = useAdmin();
 
     const handleImageClick = (e: React.MouseEvent, src: string, alt: string) => {
         e.preventDefault();
@@ -30,6 +34,21 @@ export function PromptCard({ prompt }: PromptCardProps) {
             setCopied(true);
             showToast("Prompt berhasil disalin!");
             setTimeout(() => setCopied(false), 2000);
+        }
+    };
+
+    const handleDelete = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (window.confirm("Apakah Anda yakin ingin menghapus prompt ini?")) {
+            const success = await deletePrompt(prompt.id);
+            if (success) {
+                showToast("Prompt berhasil dihapus!");
+                onDelete?.();
+            } else {
+                showToast("Gagal menghapus prompt.");
+            }
         }
     };
 
@@ -108,17 +127,28 @@ export function PromptCard({ prompt }: PromptCardProps) {
                                 </p>
                             )}
                         </div>
-                        <button
-                            onClick={handleCopy}
-                            className="btn btn-icon btn-ghost shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                            title="Salin prompt"
-                        >
-                            {copied ? (
-                                <Check className="w-4 h-4 text-green-600" />
-                            ) : (
-                                <Copy className="w-4 h-4" />
+                        <div className="flex items-center gap-1">
+                            {isAdmin && (
+                                <button
+                                    onClick={handleDelete}
+                                    className="btn btn-icon btn-ghost shrink-0 opacity-0 group-hover:opacity-100 transition-opacity text-[var(--destructive)] hover:text-red-700"
+                                    title="Hapus prompt"
+                                >
+                                    <Trash className="w-4 h-4" />
+                                </button>
                             )}
-                        </button>
+                            <button
+                                onClick={handleCopy}
+                                className="btn btn-icon btn-ghost shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                                title="Salin prompt"
+                            >
+                                {copied ? (
+                                    <Check className="w-4 h-4 text-green-600" />
+                                ) : (
+                                    <Copy className="w-4 h-4" />
+                                )}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </article>

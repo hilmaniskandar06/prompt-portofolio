@@ -5,9 +5,10 @@ import { PromptCard } from "./prompt-card";
 
 interface PromptGalleryProps {
     prompts: Prompt[];
+    onDelete?: () => void;
 }
 
-export function PromptGallery({ prompts }: PromptGalleryProps) {
+export function PromptGallery({ prompts, onDelete }: PromptGalleryProps) {
     if (prompts.length === 0) {
         return (
             <div className="col-span-full text-center py-16">
@@ -39,7 +40,7 @@ export function PromptGallery({ prompts }: PromptGalleryProps) {
     return (
         <>
             {prompts.map((prompt) => (
-                <PromptCard key={prompt.id} prompt={prompt} />
+                <PromptCard key={prompt.id} prompt={prompt} onDelete={onDelete} />
             ))}
         </>
     );

@@ -1,13 +1,14 @@
 -- Skrip untuk Supabase SQL Editor
 
 -- 1. Buat tabel prompts
+DROP TABLE IF EXISTS public.prompts;
 CREATE TABLE public.prompts (
   id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-  promptText text NOT NULL,
-  imageBefore text,
-  imageAfter text,
+  "promptText" text NOT NULL,
+  "imageBefore" text,
+  "imageAfter" text,
   notes text,
-  createdAt timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
+  "createdAt" timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
 -- 2. Buat tabel site_content untuk konfigurasi/Admin
